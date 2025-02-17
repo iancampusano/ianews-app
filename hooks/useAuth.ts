@@ -10,6 +10,8 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000, // ⏳ Asegura que no se quede colgado indefinidamente
+  withCredentials: false, // 🔹 Evita problemas con cookies y CORS
 });
 
 const useAuth = () => {
@@ -38,7 +40,7 @@ const useAuth = () => {
         console.error("❌ Error en la respuesta del servidor:", err.response.status, err.response.data);
         setError(`Error del servidor: ${err.response.status}`);
       } else if (err.request) {
-        console.error("❌ No se recibió respuesta del servidor.");
+        console.error("❌ No se recibió respuesta del servidor. Reintentando...");
         setError("No se pudo conectar con el servidor.");
       } else {
         console.error("❌ Error desconocido:", err.message);
