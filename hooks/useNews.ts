@@ -1,21 +1,32 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+"use client"; // ← Añadir esto al inicio
 
-const API_NEWS = 'https://7hnh1g8jhc.execute-api.us-east-1.amazonaws.com/dev/api/news';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const useNews = (token: string | null) => {
+const API_NEWS = "https://7hnh1g8jhc.execute-api.us-east-1.amazonaws.com/dev/api/news";
+
+const useNews = (token: string) => {
   const [news, setNews] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      axios
-        .get(API_NEWS, { headers: { Authorization: `Bearer ${token}` } } })
-        .then(res => setNews(res.data))
-        .catch(err => console.error('Error al obtener noticias:', err));
-    }
+    if (!token) return;
+
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(API_NEWS, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setNews(response.data);
+      } catch (err) {
+        setError("Error al obtener noticias");
+      }
+    };
+
+    fetchNews();
   }, [token]);
 
-  return news;
+  return { news, error };
 };
 
 export default useNews;
