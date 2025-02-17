@@ -1,32 +1,35 @@
-"use client"; // ← Añadir esto al inicio
+"use client";
 
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useNews from "../hooks/useNews";
 
 export default function Home() {
-  const { token, login } = useAuth();
-  const { news, error } = useNews(token);
-  const [loading, setLoading] = useState(true);
+  const { token, login, error: authError } = useAuth();
+  const { news, loading, error: newsError } = useNews(token);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      login("admin", "password123");
+    if (!token && !isLoggingIn) {
+      setIsLoggingIn(true);
+      login("admin", "password123").then(() => setIsLoggingIn(false));
     }
   }, [token, login]);
-
-  useEffect(() => {
-    if (news.length > 0) {
-      setLoading(false);
-    }
-  }, [news]);
 
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold">Últimas Noticias</h1>
-      {loading && <p>Cargando noticias...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      {news.length === 0 && !loading && <p>No hay noticias disponibles.</p>}
+
+      {isLoggingIn && <p>🔄 Iniciando sesión...</p>}
+      {authError && <p className="text-red-500">{authError}</p>}
+
+      {loading && <p>🔄 Cargando noticias...</p>}
+      {newsError && <p className="text-red-500">{newsError}</p>}
+
+      {!loading && news.length === 0 && !newsError && (
+        <p>⚠️ No hay noticias disponibles.</p>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {news.map((article, index) => (
           <div key={index} className="border p-4 rounded shadow-md">
