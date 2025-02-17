@@ -1,4 +1,4 @@
-"use client"; // 👈 Asegurar que sea un componente del cliente
+"use client"; // Asegurar que sea un componente del cliente
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,8 +24,12 @@ const useNews = (token: string | null) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setNews(response.data);
-        console.log("✅ Noticias cargadas exitosamente");
+        if (response.status === 200) {
+          setNews(response.data);
+          console.log("✅ Noticias cargadas exitosamente");
+        } else {
+          throw new Error("Error al obtener noticias.");
+        }
       } catch (err: any) {
         console.error("❌ Error al obtener noticias:", err);
         setError("No se pudieron cargar las noticias.");
