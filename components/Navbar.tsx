@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth"; // <-- Corregido
+import { useAuth } from "@/hooks/useAuth"; // ✅ Corrección de importación
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { loginUser } from "../lib/api";
+import { loginUser } from "../lib/api"; // ✅ Importación correcta
 
 export const useAuth = () => {
   const [token, setToken] = useState<string | null>(null);
