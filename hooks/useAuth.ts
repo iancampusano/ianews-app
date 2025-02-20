@@ -1,9 +1,7 @@
-"use client"; // Asegura que sea un componente del cliente
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "/api/auth/login"; // Proxy en Next.js para evitar problemas de CORS en desarrollo
+const API_URL = "https://wse2o9vay1.execute-api.us-east-1.amazonaws.com/dev/api/auth/login";
 
 const useAuth = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -16,35 +14,16 @@ const useAuth = () => {
 
   const login = async (username: string, password: string) => {
     try {
-      console.log("🔄 Iniciando sesión...");
-      
-      const response = await axios.post(API_URL, { username, password }, {
-        headers: { "Content-Type": "application/json" },
-        timeout: 10000, // ⏳ Evita bloqueos indefinidos
-        withCredentials: false, // 🔹 Evita problemas con cookies en CORS
-      });
+      const response = await axios.post(API_URL, { username, password });
 
-      if (response.status === 200 && response.data.token) {
+      if (response.data.success) {
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        console.log("✅ Autenticación exitosa:", response.data.token);
       } else {
-        throw new Error("No se recibió un token válido.");
+        setError("Credenciales inválidas");
       }
-    } catch (err: any) {
-      if (err.response) {
-        console.error(`❌ Error del servidor: ${err.response.status}`, err.response.data);
-        setError(`Error del servidor: ${err.response.status}`);
-      } else if (err.message.includes("CORS")) {
-        console.error("❌ Problema de CORS: Verifica la configuración del backend.");
-        setError("Error de CORS: La API no permite esta solicitud.");
-      } else if (err.request) {
-        console.error("❌ No se recibió respuesta del servidor. Verifica la API.");
-        setError("No se pudo conectar con el servidor.");
-      } else {
-        console.error("❌ Error desconocido:", err.message);
-        setError("Ocurrió un error inesperado.");
-      }
+    } catch (err) {
+      setError("Error en autenticación");
     }
   };
 

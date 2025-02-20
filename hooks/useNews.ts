@@ -1,9 +1,5 @@
-"use client"; // Asegurar que sea un componente del cliente
-
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-const API_NEWS = "https://7hnh1g8jhc.execute-api.us-east-1.amazonaws.com/dev/api/news";
+import { fetchNews } from "@/lib/api";
 
 const useNews = (token: string | null) => {
   const [news, setNews] = useState([]);
@@ -11,34 +7,20 @@ const useNews = (token: string | null) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      console.warn("⚠️ No se encontró token. No se pueden obtener noticias.");
-      return;
-    }
+    if (!token) return;
 
-    console.log("🔄 Cargando noticias...");
-
-    const fetchNews = async () => {
-      try {
-        const response = await axios.get(API_NEWS, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (response.status === 200) {
-          setNews(response.data);
-          console.log("✅ Noticias cargadas exitosamente");
-        } else {
-          throw new Error("Error al obtener noticias.");
-        }
-      } catch (err: any) {
-        console.error("❌ Error al obtener noticias:", err);
-        setError("No se pudieron cargar las noticias.");
-      } finally {
-        setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      const result = await fetchNews(token);
+      if (result.success) {
+        setNews(result.data);
+      } else {
+        setError(result.message);
       }
+      setLoading(false);
     };
 
-    fetchNews();
+    fetchData();
   }, [token]);
 
   return { news, loading, error };
