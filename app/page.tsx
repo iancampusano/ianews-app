@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";  // <-- Import corregido
 import useNews from "../hooks/useNews";
 
 export default function Home() {
