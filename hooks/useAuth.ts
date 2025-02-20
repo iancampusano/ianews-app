@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-const API_URL = "https://wse2o9vay1.execute-api.us-east-1.amazonaws.com/dev/api/auth/login";
+import { loginUser } from "../lib/api";
 
 const useAuth = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -14,11 +12,11 @@ const useAuth = () => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post(API_URL, { username, password });
+      const response = await loginUser(username, password);
 
-      if (response.data.success) {
-        setToken(response.data.token);
-        localStorage.setItem("token", response.data.token);
+      if (response.token) {
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
       } else {
         setError("Credenciales inválidas");
       }

@@ -1,12 +1,20 @@
-import { useState } from 'react';
-import useAuth from '../hooks/useAuth';
+import { useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = () => login(username, password);
+  const handleLogin = async () => {
+    await login(username, password);
+    if (!error) {
+      router.push("/");
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -27,6 +35,7 @@ export default function LoginPage() {
         <button onClick={handleLogin} className="mt-4 bg-blue-600 text-white p-2 rounded w-full">
           Entrar
         </button>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
     </div>
   );

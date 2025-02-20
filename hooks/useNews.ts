@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchNews } from "@/lib/api";
+import { fetchNews } from "../lib/api";
 
 const useNews = (token: string | null) => {
   const [news, setNews] = useState([]);
@@ -11,11 +11,15 @@ const useNews = (token: string | null) => {
 
     const fetchData = async () => {
       setLoading(true);
-      const result = await fetchNews(token);
-      if (result.success) {
-        setNews(result.data);
-      } else {
-        setError(result.message);
+      try {
+        const result = await fetchNews(token);
+        if (result.success) {
+          setNews(result.news);
+        } else {
+          setError(result.message);
+        }
+      } catch (err) {
+        setError("Error en la carga de noticias");
       }
       setLoading(false);
     };
