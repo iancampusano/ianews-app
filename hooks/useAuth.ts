@@ -7,12 +7,16 @@ export const useAuth = () => {
 
   const login = async (username: string, password: string) => {
     setError(null);
-    const response = await loginUser(username, password);
-    if (response.token) {
-      setToken(response.token);
-      localStorage.setItem("token", response.token);
-    } else {
-      setError("Credenciales incorrectas");
+    try {
+      const response = await loginUser(username, password);
+      if (response.token) {
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
+      } else {
+        setError("Credenciales incorrectas");
+      }
+    } catch (err) {
+      setError("Error en autenticación");
     }
   };
 
