@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://2lpgsndcmj.execute-api.us-east-1.amazonaws.com/dev/api";
+const API_BASE_URL = "https://oughzyjcml.execute-api.us-east-1.amazonaws.com/dev/api";
 
 export const fetchNews = async (token: string) => {
   try {
