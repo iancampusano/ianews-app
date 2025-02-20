@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth"; 
+import { useAuth } from "../hooks/useAuth";
 import useNews from "../hooks/useNews";
 
 interface Article {
@@ -38,15 +38,16 @@ export default function Home() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {news.map((article: Article, index) => (
-          <div key={index} className="border p-4 rounded shadow-md">
-            <h2 className="font-bold">{article.title}</h2>
-            <p>{article.description}</p>
-            <a href={article.link_news} target="_blank" className="text-blue-500">
-              Leer más
-            </a>
-          </div>
-        ))}
+        {Array.isArray(news) &&
+          news.map((article: Article, index) => (
+            <div key={index} className="border p-4 rounded shadow-md">
+              <h2 className="font-bold">{article.title}</h2>
+              <p>{article.description}</p>
+              <a href={article.link_news} target="_blank" className="text-blue-500">
+                Leer más
+              </a>
+            </div>
+          ))}
       </div>
     </div>
   );

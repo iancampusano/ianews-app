@@ -20,5 +20,10 @@ export const useAuth = () => {
     }
   };
 
-  return { token, login, error };
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem("token");
+  };
+
+  return { token, login, logout, error };
 };

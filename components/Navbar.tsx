@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import useAuth from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth"; // <-- Corregido
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);
-  const { logout } = useAuth();
+  const { token, logout } = useAuth();
 
   useEffect(() => {
     if (darkMode) {
@@ -18,7 +18,7 @@ export default function Navbar() {
       <button onClick={() => setDarkMode(!darkMode)} className="text-black dark:text-white">
         {darkMode ? "☀️ Modo Claro" : "🌙 Modo Oscuro"}
       </button>
-      <button onClick={logout} className="text-red-500">Cerrar sesión</button>
+      {token && <button onClick={logout} className="text-red-500">Cerrar sesión</button>}
     </nav>
   );
 }
