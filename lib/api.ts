@@ -1,33 +1,18 @@
-const useNews = (token: string | null) => {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const API_BASE_URL = "https://oughzyjcml.execute-api.us-east-1.amazonaws.com/dev/api";
 
-  useEffect(() => {
-    if (!token) return;
+export const fetchNews = async (token: string) => {
+  if (!token) return { success: false, news: [] };
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const result = await fetchNews(token);
-        if (result.success) {
-          setNews(result.news.map((article: any) => ({
-            ...article,
-            source: article.source || "Fuente desconocida", // ⬅️ Evita valores nulos
-          })));
-        } else {
-          setError(result.message);
-        }
-      } catch (err) {
-        setError("Error en la carga de noticias");
-      }
-      setLoading(false);
-    };
+  try {
+    const response = await fetch(`${API_BASE_URL}/news`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-    fetchData();
-  }, [token]);
+    if (!response.ok) throw new Error("Error al obtener noticias");
 
-  return { news, loading, error };
+    return await response.json();
+  } catch (error) {
+    console.error("❌ Error al obtener noticias:", error);
+    return { success: false, news: [] };
+  }
 };
-
-export default useNews;

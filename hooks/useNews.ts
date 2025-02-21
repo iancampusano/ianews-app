@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchNews } from "../lib/api";
+import { fetchNews } from "../lib/api"; // ✅ Importación corregida
 
 const useNews = (token: string | null) => {
   const [news, setNews] = useState([]);
