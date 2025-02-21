@@ -1,5 +1,6 @@
 import { List, Avatar } from "antd";
 import { MessageOutlined, LikeOutlined, StarOutlined } from "@ant-design/icons";
+import NewsCard from "./NewsCard";
 
 interface Article {
   id: string;
@@ -7,6 +8,7 @@ interface Article {
   description: string;
   link_news: string;
   link_image?: string;
+  source: string; // ⬅️ Agregamos la fuente
 }
 
 export default function NewsList({ news }: { news: Article[] }) {
@@ -45,9 +47,14 @@ export default function NewsList({ news }: { news: Article[] }) {
           <List.Item.Meta
             avatar={<Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />}
             title={<a href={article.link_news}>{article.title}</a>}
-            description="Fuente: Ant Design News"
+            description={`Fuente: ${article.source}`} // ⬅️ Agregamos la fuente en el listado
           />
-          {article.description}
+          <NewsCard
+            title={article.title}
+            description={article.description}
+            image={article.link_image}
+            source={article.source} // ⬅️ Pasamos la fuente a NewsCard
+          />
         </List.Item>
       )}
     />
