@@ -3,13 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import useNews from "../hooks/useNews";
-
-interface Article {
-  id: string;
-  title: string;
-  description: string;
-  link_news: string;
-}
+import NewsList from "../components/NewsList";
 
 export default function Home() {
   const { token, login, error: authError } = useAuth();
@@ -29,7 +23,6 @@ export default function Home() {
 
       {isLoggingIn && <p>🔄 Iniciando sesión...</p>}
       {authError && <p className="text-red-500">{authError}</p>}
-
       {loading && <p>🔄 Cargando noticias...</p>}
       {newsError && <p className="text-red-500">{newsError}</p>}
 
@@ -37,18 +30,7 @@ export default function Home() {
         <p>⚠️ No hay noticias disponibles.</p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.isArray(news) &&
-          news.map((article: Article, index) => (
-            <div key={index} className="border p-4 rounded shadow-md">
-              <h2 className="font-bold">{article.title}</h2>
-              <p>{article.description}</p>
-              <a href={article.link_news} target="_blank" className="text-blue-500">
-                Leer más
-              </a>
-            </div>
-          ))}
-      </div>
+      {!loading && news.length > 0 && <NewsList news={news} />}
     </div>
   );
 }
