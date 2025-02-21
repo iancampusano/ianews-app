@@ -9,5 +9,8 @@ npm cache clean --force
 echo "📦 Instalando dependencias..."
 npm install
 
+echo "📦 Reiniciar la red de puertos..."
+sudo lsof -t -i tcp:3000-3010 | xargs sudo kill -9
+
 echo "🚀 Iniciando el servidor de desarrollo..."
 npm run dev
