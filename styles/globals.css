@@ -1,31 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth"; // ✅ Corrección de importación
 
-/* Modo oscuro */
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+export default function Navbar() {
+  const { token, logout } = useAuth();
+  const [darkMode, setDarkMode] = useState(false); // ⬅️ Inicia en modo claro por defecto
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  useEffect(() => {
+    document.documentElement.classList.remove("dark"); // ⬅️ Asegura que inicia en modo claro
+  }, []);
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Tarjetas de noticias */
-.news-card {
-  transition: transform 0.2s ease-in-out;
-}
-
-.news-card:hover {
-  transform: scale(1.02);
+  return (
+    <nav className="p-4 bg-white dark:bg-gray-800 flex justify-between items-center">
+      <button
+        onClick={() => {
+          setDarkMode(!darkMode);
+          if (darkMode) {
+            document.documentElement.classList.remove("dark");
+          } else {
+            document.documentElement.classList.add("dark");
+          }
+        }}
+        className="text-black dark:text-white"
+      >
+        {darkMode ? "☀️ Modo Claro" : "🌙 Modo Oscuro"}
+      </button>
+      {token && <button onClick={logout} className="text-red-500">Cerrar sesión</button>}
+    </nav>
+  );
 }

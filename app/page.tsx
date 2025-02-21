@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold">Últimas Noticias</h1>
+      <h1 className="text-2xl font-bold mb-4">📰 Últimas Noticias</h1>
 
       {isLoggingIn && <p>🔄 Iniciando sesión...</p>}
       {authError && <p className="text-red-500">{authError}</p>}
