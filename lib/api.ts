@@ -1,18 +1,18 @@
 const API_BASE_URL = "https://oughzyjcml.execute-api.us-east-1.amazonaws.com/dev/api";
 
-export const fetchNews = async (token: string) => {
-  if (!token) return { success: false, news: [] };
-
+export const loginUser = async (username: string, password: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/news`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
     });
 
-    if (!response.ok) throw new Error("Error al obtener noticias");
+    if (!response.ok) throw new Error("Error al iniciar sesión");
 
     return await response.json();
   } catch (error) {
-    console.error("❌ Error al obtener noticias:", error);
-    return { success: false, news: [] };
+    console.error("❌ Error en autenticación:", error);
+    return { token: null };
   }
 };
